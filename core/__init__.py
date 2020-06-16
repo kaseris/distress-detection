@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from .application import Application
+from .application import DatasetApplication
 from .application import RemoteGatewayApplication
 
 from .callbacks import Callback
