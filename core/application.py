@@ -106,3 +106,49 @@ class DatasetApplication(Application):
 
             self.curr_step += 1
             self.cblist.on_loop_end()
+
+class TransformDatasetApplication(Application):
+
+    def __init__(self, app_name, dataset_dir, output_dir, samples_per_loop=200, steps=None, callbacks=None):
+        super(TransformDatasetApplication, self).__init__(app_name)
+        self.samples_per_loop = samples_per_loop
+        self.dataset_dir = dataset_dir
+        self.output_dir = output_dir
+
+        self.total_elements = len(os.listdir(dataset_dir))
+        self.steps = steps or round(self.total_elements / self.samples_per_loop)
+        self.curr_step = 0
+
+        self.callbacks = callbacks or []
+        self.callbacks.append(ProgressBarCallback(self))
+        self.cblist = CallbackList(self.callbacks)
+
+        if not os.path.isdir(self.dataset_dir):
+            raise OSError(f"{self.dataset_dir} directory does not exist")
+
+        if not os.path.isdir(self.output_dir):
+            os.mkdir(self.output_dir)
+
+    def run(self):
+
+        tfs = []
+        while self.curr_step < self.steps:
+            img_names = []
+            img_paths = []
+
+            img_names = os.listdir(self.dataset_dir)[self.curr_step * self.samples_per_loop:(self.curr_step + 1)*self.samples_per_loop]
+            img_paths = [self.dataset_dir + '/' + name for name in img_names]
+
+            for img_path, name in zip(img_paths, img_names):
+                img = ImageProcessor.ReadImage(img_path)
+                tf = ImageProcessor.FFT(img)
+
+                cropped_tf = ImageProcessor.Crop(tf, 100)
+                tfs.append(cropped_tf)
+
+            self.curr_step += 1
+            self.cblist.on_loop_end()
+
+        tf_array = np.array(tfs)
+        np.savez_compressed(self.output_dir + "/dataset.npz", tf_array)
+        sys.stdout.write('\nFinished.')

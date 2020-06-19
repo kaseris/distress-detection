@@ -6,7 +6,7 @@ from . import utils
 from . import window
 
 from .core import Application
-from .core import RemoteGatewayApplication
+from .core import RemoteGatewayApplication, TransformDatasetApplication
 from .core import DatasetApplication
 
 __version__ = '1.0.0'
