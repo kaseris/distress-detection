@@ -26,6 +26,20 @@ class ImageProcessor:
         return cv2.resize(img, dst_shape)
 
     @staticmethod
+    def FFT(img):
+        f = np.fft.fft2(img)
+        return np.fft.fftshift(f)
+
+    @staticmethod
+    def IFFT(f):
+        f = np.fft.ifftshift(f)
+        return np.fft.ifft2(f)
+
+    @staticmethod
+    def LogTransform(f):
+        return 20 * np.log(np.abs(f))
+
+    @staticmethod
     def Crop(img, amount, mode=MODE_CENTER_CROP, *args):
 
         if mode == MODE_CENTER_CROP:

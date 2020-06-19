@@ -54,6 +54,7 @@ class TimeElapsedCallback(Callback):
         self.timeElapsed = time() - self.t0
 
         print("Time elapsed: {:.3f}ms".format(self.timeElapsed * 1000))
+        print(f"FPS: {1.0 / self.timeElapsed:.3f}")
 
 
 class TerminateAppCallback(Callback):
