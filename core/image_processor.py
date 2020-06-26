@@ -1,12 +1,11 @@
 import cv2
 import numpy as np
 
-MODE_GRAYSCALE = 0
-
-MODE_CENTER_CROP=0
-MODE_NORMAL_CROP=1
-
 class ImageProcessor:
+    MODE_GRAYSCALE = 0
+
+    MODE_CENTER_CROP = 0
+    MODE_NORMAL_CROP = 1
 
     @staticmethod
     def ReadImage(path, mode=MODE_GRAYSCALE):

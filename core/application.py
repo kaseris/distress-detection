@@ -13,6 +13,9 @@ from ..window import Window
 
 
 class Application:
+    """
+    TODO: Initialise the callback list from the base class.
+    """
     def __init__(self, app_name):
         self.appName = app_name
         self.isAppRunning = False
@@ -92,16 +95,16 @@ class DatasetApplication(Application):
 
             for img_path, name in zip(img_paths, img_names):
                 img = ImageProcessor.ReadImage(img_path)
-                a = (img.shape[0] <= 200) or (img.shape[1] <= 200)
+                a = (img.shape[0] <= 256) or (img.shape[1] <= 256)
                 if a:
                     continue
-                random_crops = np.random.randint(0, min(img.shape[0] - 200, img.shape[1] - 200), (4, 2))
+                random_crops = np.random.randint(0, min(img.shape[0] - 256, img.shape[1] - 256), (4, 2))
 
                 for i, crop in enumerate(random_crops.tolist()):
-                    cropped = ImageProcessor.Crop(img, 200, 1, crop)
+                    cropped = ImageProcessor.Crop(img, 256, 1, crop)
                     ImageProcessor.StoreImage(self.output_dir + "/" + name + f"_cropped{i}" + self.extension, cropped)
 
-                cropped = ImageProcessor.Crop(img, 200)
+                cropped = ImageProcessor.Crop(img, 256)
                 ImageProcessor.StoreImage(self.output_dir + "/" + name + f"_cropped_center" + self.extension, cropped)
 
             self.curr_step += 1
